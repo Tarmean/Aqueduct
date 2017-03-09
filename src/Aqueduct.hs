@@ -1,4 +1,4 @@
-module Aqueduct (Gen, Iter, Effect, runEffect, yield, await, (>->), lift) where
+module Aqueduct (Gen, Iter, Effect, runEffect, yield, await, (>->), lift, fold, streamInto) where
 import Control.Monad ((>=>))
 import Data.Void (Void)
 import Control.Monad.Trans
@@ -24,6 +24,20 @@ await :: Pipe () a b' b m a
 await = East () Done
 (>->) :: Monad m => Pipe a' a b' b m r -> Pipe b' b c' c m r -> Pipe a' a c' c m r
 p1 >-> p2 = const p1 `pull` p2
+
+fold :: Monad m => (acc -> b -> acc) -> acc -> (acc -> r) -> Gen b m () -> Effect m r
+fold step start end = go start
+  where
+    go acc (Done ()) = Done $ end acc
+    go acc (Context m) = Context $ fmap (go acc) m
+    go acc (West b f) = go (step acc b) (f ())
+    go _   (East _ _) = undefined
+
+streamInto :: Monad m => Gen b m r -> (b -> Gen c m s) -> Gen c m r
+(Done result) `streamInto` _ = Done result
+(Context m) `streamInto` f = Context $ fmap (`streamInto` f) m
+(East _ _) `streamInto` _ = undefined
+(West v c) `streamInto` f = f v >> c () `streamInto` f
 
 pull :: Monad m => (b' -> Pipe a' a b' b m r) -> Pipe b' b c' c m r -> Pipe a' a c' c m r
 _ `pull` Done result  = Done result

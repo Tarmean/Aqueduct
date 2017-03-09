@@ -4,13 +4,30 @@ import Aqueduct
 import Data.Functor (void)
 
 main :: IO ()
-main = runEffect $ makeNumbers >-> sumStuff 0
+main = runEffect $ do
+  each [1..10] >-> rollingSum 0
 
-makeNumbers :: Monad m => Gen Int m ()
-makeNumbers = void $ traverse yield [1..10]
+  lift $ putStrLn "-----"
 
-sumStuff :: Int -> Iter Int IO a
-sumStuff n = do
+  summed <- sumP (each [1..10])
+  lift $ print summed >> putStrLn "-----"
+
+  each [3..5::Int] `streamInto` (each . enumFromTo 1) >-> printP
+
+sumP :: Monad m => Gen Int m () -> Effect m Int
+sumP = fold (+) 0 id
+
+each :: Monad m => [a] -> Gen a m ()
+each = void . traverse yield 
+
+printP :: Show a => Iter a IO ()
+printP = do
+  cur <- await
+  lift $ print cur
+  printP
+
+rollingSum :: Int -> Iter Int IO a
+rollingSum n = do
   x <- await
   lift $ print (x + n)
-  sumStuff (x+n)
+  rollingSum (x+n)
