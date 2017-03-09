@@ -2,8 +2,6 @@ module Main where
 
 import Aqueduct
 import Data.Functor (void)
-import Control.Monad (replicateM_)
-import qualified Data.Foldable as F
 
 
 sumP :: Monad m => Producer Int m () -> Effect m Int
@@ -26,9 +24,16 @@ rollingSum n = do
 
 
 main :: IO ()
-main =  runEffect $ const pairR `pull` pairL
-pairR :: Pipe x x'  Int String IO ()
-pairR = replicateM_ 3 $ yield "foo" >>= lift . print
+main =  runEffect $ server `pull` client
 
-pairL :: Pipe Int String x' x IO ()
-pairL = F.fold [ yieldUp 3, yieldUp 4, yieldUp 5 ] >>= lift . print
+server ::Int ->  Pipe x' x Int Int IO r
+server i = do
+  lift (print i) 
+  server =<< yieldDownstream (i*3)
+     
+
+client :: Pipe Int Int x' x IO ()
+client = do
+  lift . print =<< yieldUpstream 3
+  lift . print =<< yieldUpstream 4
+  lift . print =<< yieldUpstream 5

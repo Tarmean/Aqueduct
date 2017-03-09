@@ -1,4 +1,4 @@
-module Aqueduct (Pipe, Producer, Consumer, Effect, runEffect, yield, await, (>->), lift, fold, into, outof, awaitDown, yieldUp, push, pull, Void) where
+module Aqueduct (Pipe, Producer, Consumer, Effect, runEffect, yield, await, (>->), lift, fold, into, outof, yieldDownstream, yieldUpstream, push, pull, Void) where
 import Control.Monad ((>=>))
 import Data.Void (Void)
 import Control.Monad.Trans
@@ -20,12 +20,14 @@ runEffect (East _ _)  = undefined
 
 yield :: b -> Pipe b' a a' b m a'
 yield b = West b Done
-yieldUp :: b' -> Pipe b' a a' b m a
-yieldUp b = East b Done
+yieldUpstream :: b' -> Pipe b' a a' b m a
+yieldUpstream b = East b Done
 await :: Pipe () a a' b m a
 await = East () Done
-awaitDown :: Pipe b' a a' () m a'
-awaitDown = West () Done
+yieldDownstream :: b -> Pipe b' a a' b m a'
+yieldDownstream = yield
+
+
 (>->) :: Monad m => Pipe a' a b' b m r -> Pipe b' b c' c m r -> Pipe a' a c' c m r
 p1 >-> p2 = const p1 `pull` p2
 
@@ -53,6 +55,8 @@ outof = go . const
     go f (East v cont) = f v >>= go f . cont
     go f (West v cont) = West v $ go f . cont
     go f (Context m)   =  Context $ fmap (go f) m
+
+
 
 pull :: Monad m => (b' -> Pipe a' a b' b m r) -> Pipe b' b c' c m r -> Pipe a' a c' c m r
 _ `pull` Done result  = Done result
