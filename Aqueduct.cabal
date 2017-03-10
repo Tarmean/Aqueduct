@@ -20,7 +20,6 @@ library
   hs-source-dirs:      src
   exposed-modules:     Aqueduct
   build-depends:       base >= 4.7 && < 5
-                     , free
                      , void
                      , mtl
 

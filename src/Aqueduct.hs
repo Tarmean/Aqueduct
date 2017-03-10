@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module Aqueduct (Pipe, Producer, Consumer, Effect, runEffect, yield, await, (>->), lift, fold, into, outof, yieldDownstream, yieldUpstream, push, pull, Void) where
 import Control.Monad ((>=>))
 import Data.Void (Void)
@@ -36,7 +37,7 @@ fold step start end = go start
   where
     go acc (Done ()) = Done $ end acc
     go acc (Context m) = Context $ fmap (go acc) m
-    go acc (West b f) = go (step acc b) (f ())
+    go acc (West b f) = let !acc' = step acc b in go acc'(f ())
     go _   (East _ _) = undefined
 
 
@@ -86,4 +87,4 @@ instance (Monad m, Monoid r) => Monoid (Pipe b' a a' b m r) where
   mempty = return mempty
   l `mappend` r = mappend <$> l <*> r
 instance MonadTrans (Pipe b' a a' b) where
-  lift v = Context $ Done <$> v
+  lift v = Context $ v >>= \r -> return (Done r)

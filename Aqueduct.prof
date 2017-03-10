@@ -1,0 +1,59 @@
+	Thu Mar 09 23:11 2017 Time and Allocation Profiling Report  (Final)
+
+	   Aqueduct.exe +RTS -N -p -RTS
+
+	total time  =        0.00 secs   (1 ticks @ 1000 us, 1 processor)
+	total alloc =   3,330,424 bytes  (excludes profiling overheads)
+
+COST CENTRE   MODULE           SRC                             %time %alloc
+
+main          Main             app\Main.hs:26:1-58             100.0   24.0
+each          Main             app\Main.hs:11:1-47               0.0    7.2
+each.\        Main             app\Main.hs:11:23-34              0.0   26.4
+>>=           Aqueduct         src\Aqueduct.hs:(81,3)-(84,43)    0.0   36.3
+fold.go.(...) Aqueduct         src\Aqueduct.hs:40:29-46          0.0    4.8
+CAF           GHC.IO.Handle.FD <entire-module>                   0.0    1.0
+
+
+                                                                                                   individual      inherited
+COST CENTRE             MODULE                   SRC                            no.     entries  %time %alloc   %time %alloc
+
+MAIN                    MAIN                     <built-in>                      71          0    0.0    0.1   100.0  100.0
+ CAF                    GHC.IO.Encoding.CodePage <entire-module>                126          0    0.0    0.0     0.0    0.0
+ CAF                    GHC.IO.Encoding          <entire-module>                120          0    0.0    0.0     0.0    0.0
+ CAF                    GHC.Conc.Windows         <entire-module>                117          0    0.0    0.0     0.0    0.0
+ CAF                    GHC.IO.Handle.Text       <entire-module>                115          0    0.0    0.0     0.0    0.0
+ CAF                    GHC.IO.Handle.FD         <entire-module>                114          0    0.0    1.0     0.0    1.0
+ CAF:$fApplicativePipe2 Aqueduct                 <no location info>              93          0    0.0    0.0     0.0    0.0
+  return                Aqueduct                 src\Aqueduct.hs:80:3-15        162          1    0.0    0.0     0.0    0.0
+ CAF:main               Main                     app\Main.hs:26:1-4              91          0    0.0    0.0     0.0    0.0
+  main                  Main                     app\Main.hs:26:1-58            142          1    0.0    0.0     0.0    0.0
+   runEffect            Aqueduct                 src\Aqueduct.hs:(17,1)-(20,33) 143          1    0.0    0.0     0.0    0.0
+ CAF:main1              Main                     <no location info>              90          0    0.0    0.0     0.0    0.0
+  main                  Main                     app\Main.hs:26:1-58            144          0    0.0    0.0     0.0    0.0
+   >>=                  Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 145          1    0.0    0.0     0.0    0.0
+   lift                 Aqueduct                 src\Aqueduct.hs:90:3-31        163          1    0.0    0.0     0.0    0.0
+ CAF:main5              Main                     <no location info>              89          0    0.0    0.0     0.0   24.0
+  main                  Main                     app\Main.hs:26:1-58            146          0    0.0    0.0     0.0   24.0
+   sumP                 Main                     app\Main.hs:8:1-20             147          1    0.0    0.0     0.0    4.8
+    fold                Aqueduct                 src\Aqueduct.hs:(36,1)-(41,33) 148          1    0.0    0.0     0.0    4.8
+     fold.go            Aqueduct                 src\Aqueduct.hs:(38,5)-(41,33) 149      10001    0.0    0.0     0.0    4.8
+      fold.go.(...)     Aqueduct                 src\Aqueduct.hs:40:29-46       156      10000    0.0    4.8     0.0    4.8
+   each                 Main                     app\Main.hs:11:1-47            157          0    0.0    0.0     0.0   19.2
+    each.\              Main                     app\Main.hs:11:23-34           158          0    0.0    0.0     0.0   19.2
+     >>=                Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 159      10000    0.0   19.2     0.0   19.2
+ CAF:main6              Main                     <no location info>              80          0    0.0    0.0     0.0   50.4
+  main                  Main                     app\Main.hs:26:1-58            150          0    0.0    0.0     0.0   50.4
+   each                 Main                     app\Main.hs:11:1-47            151          1    0.0    7.2     0.0   50.4
+    each.\              Main                     app\Main.hs:11:23-34           153      10000    0.0   26.4     0.0   43.2
+     >>=                Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 155      10000    0.0   16.8     0.0   16.8
+     yield              Aqueduct                 src\Aqueduct.hs:23:1-21        154      10000    0.0    0.0     0.0    0.0
+ CAF:main7              Main                     <no location info>              78          0    0.0    0.0   100.0   24.0
+  main                  Main                     app\Main.hs:26:1-58            152          0  100.0   24.0   100.0   24.0
+ CAF:z_r3Dr             Main                     <no location info>              79          0    0.0    0.0     0.0    0.0
+  main                  Main                     app\Main.hs:26:1-58            160          0    0.0    0.0     0.0    0.0
+   each                 Main                     app\Main.hs:11:1-47            161          0    0.0    0.0     0.0    0.0
+ main                   Main                     app\Main.hs:26:1-58            164          0    0.0    0.0     0.0    0.3
+  runEffect             Aqueduct                 src\Aqueduct.hs:(17,1)-(20,33) 165          1    0.0    0.0     0.0    0.0
+  >>=                   Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 167          0    0.0    0.3     0.0    0.3
+  lift                  Aqueduct                 src\Aqueduct.hs:90:3-31        166          0    0.0    0.0     0.0    0.0
