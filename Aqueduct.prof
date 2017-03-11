@@ -1,59 +1,77 @@
-	Thu Mar 09 23:11 2017 Time and Allocation Profiling Report  (Final)
+	Fri Mar 10 23:50 2017 Time and Allocation Profiling Report  (Final)
 
 	   Aqueduct.exe +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (1 ticks @ 1000 us, 1 processor)
-	total alloc =   3,330,424 bytes  (excludes profiling overheads)
+	total time  =        0.13 secs   (133 ticks @ 1000 us, 1 processor)
+	total alloc = 1,367,602,440 bytes  (excludes profiling overheads)
 
-COST CENTRE   MODULE           SRC                             %time %alloc
+COST CENTRE MODULE         SRC                                     %time %alloc
 
-main          Main             app\Main.hs:26:1-58             100.0   24.0
-each          Main             app\Main.hs:11:1-47               0.0    7.2
-each.\        Main             app\Main.hs:11:23-34              0.0   26.4
->>=           Aqueduct         src\Aqueduct.hs:(81,3)-(84,43)    0.0   36.3
-fold.go.(...) Aqueduct         src\Aqueduct.hs:40:29-46          0.0    4.8
-CAF           GHC.IO.Handle.FD <entire-module>                   0.0    1.0
+lift        Pipes.Internal src\Pipes\Internal.hs:132:5-44           72.2   72.8
+main        Main           app\Main.hs:6:1-58                        9.0    7.6
+_bind.go    Pipes.Internal src\Pipes\Internal.hs:(104,5)-(108,29)    9.0    7.0
+>>=         Pipes.Internal src\Pipes\Internal.hs:96:5-18             3.0    2.3
+forever'    Main           app\Main.hs:8:1-28                        2.3    1.5
+printLoop   Main           app\Main.hs:(9,1)-(11,22)                 2.3    1.2
+_bind.go.\  Pipes.Internal src\Pipes\Internal.hs:107:43-56           1.5    2.3
+_bind       Pipes.Internal src\Pipes\Internal.hs:(103,1)-(108,29)    0.0    4.1
 
 
-                                                                                                   individual      inherited
-COST CENTRE             MODULE                   SRC                            no.     entries  %time %alloc   %time %alloc
+                                                                                                            individual      inherited
+COST CENTRE              MODULE                   SRC                                    no.     entries  %time %alloc   %time %alloc
 
-MAIN                    MAIN                     <built-in>                      71          0    0.0    0.1   100.0  100.0
- CAF                    GHC.IO.Encoding.CodePage <entire-module>                126          0    0.0    0.0     0.0    0.0
- CAF                    GHC.IO.Encoding          <entire-module>                120          0    0.0    0.0     0.0    0.0
- CAF                    GHC.Conc.Windows         <entire-module>                117          0    0.0    0.0     0.0    0.0
- CAF                    GHC.IO.Handle.Text       <entire-module>                115          0    0.0    0.0     0.0    0.0
- CAF                    GHC.IO.Handle.FD         <entire-module>                114          0    0.0    1.0     0.0    1.0
- CAF:$fApplicativePipe2 Aqueduct                 <no location info>              93          0    0.0    0.0     0.0    0.0
-  return                Aqueduct                 src\Aqueduct.hs:80:3-15        162          1    0.0    0.0     0.0    0.0
- CAF:main               Main                     app\Main.hs:26:1-4              91          0    0.0    0.0     0.0    0.0
-  main                  Main                     app\Main.hs:26:1-58            142          1    0.0    0.0     0.0    0.0
-   runEffect            Aqueduct                 src\Aqueduct.hs:(17,1)-(20,33) 143          1    0.0    0.0     0.0    0.0
- CAF:main1              Main                     <no location info>              90          0    0.0    0.0     0.0    0.0
-  main                  Main                     app\Main.hs:26:1-58            144          0    0.0    0.0     0.0    0.0
-   >>=                  Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 145          1    0.0    0.0     0.0    0.0
-   lift                 Aqueduct                 src\Aqueduct.hs:90:3-31        163          1    0.0    0.0     0.0    0.0
- CAF:main5              Main                     <no location info>              89          0    0.0    0.0     0.0   24.0
-  main                  Main                     app\Main.hs:26:1-58            146          0    0.0    0.0     0.0   24.0
-   sumP                 Main                     app\Main.hs:8:1-20             147          1    0.0    0.0     0.0    4.8
-    fold                Aqueduct                 src\Aqueduct.hs:(36,1)-(41,33) 148          1    0.0    0.0     0.0    4.8
-     fold.go            Aqueduct                 src\Aqueduct.hs:(38,5)-(41,33) 149      10001    0.0    0.0     0.0    4.8
-      fold.go.(...)     Aqueduct                 src\Aqueduct.hs:40:29-46       156      10000    0.0    4.8     0.0    4.8
-   each                 Main                     app\Main.hs:11:1-47            157          0    0.0    0.0     0.0   19.2
-    each.\              Main                     app\Main.hs:11:23-34           158          0    0.0    0.0     0.0   19.2
-     >>=                Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 159      10000    0.0   19.2     0.0   19.2
- CAF:main6              Main                     <no location info>              80          0    0.0    0.0     0.0   50.4
-  main                  Main                     app\Main.hs:26:1-58            150          0    0.0    0.0     0.0   50.4
-   each                 Main                     app\Main.hs:11:1-47            151          1    0.0    7.2     0.0   50.4
-    each.\              Main                     app\Main.hs:11:23-34           153      10000    0.0   26.4     0.0   43.2
-     >>=                Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 155      10000    0.0   16.8     0.0   16.8
-     yield              Aqueduct                 src\Aqueduct.hs:23:1-21        154      10000    0.0    0.0     0.0    0.0
- CAF:main7              Main                     <no location info>              78          0    0.0    0.0   100.0   24.0
-  main                  Main                     app\Main.hs:26:1-58            152          0  100.0   24.0   100.0   24.0
- CAF:z_r3Dr             Main                     <no location info>              79          0    0.0    0.0     0.0    0.0
-  main                  Main                     app\Main.hs:26:1-58            160          0    0.0    0.0     0.0    0.0
-   each                 Main                     app\Main.hs:11:1-47            161          0    0.0    0.0     0.0    0.0
- main                   Main                     app\Main.hs:26:1-58            164          0    0.0    0.0     0.0    0.3
-  runEffect             Aqueduct                 src\Aqueduct.hs:(17,1)-(20,33) 165          1    0.0    0.0     0.0    0.0
-  >>=                   Aqueduct                 src\Aqueduct.hs:(81,3)-(84,43) 167          0    0.0    0.3     0.0    0.3
-  lift                  Aqueduct                 src\Aqueduct.hs:90:3-31        166          0    0.0    0.0     0.0    0.0
+MAIN                     MAIN                     <built-in>                              67          0    0.0    0.0   100.0  100.0
+ CAF                     GHC.IO.Encoding.CodePage <entire-module>                        119          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.IO.Encoding          <entire-module>                        113          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.Conc.Windows         <entire-module>                        109          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.IO.Handle.Text       <entire-module>                        106          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.IO.Handle.FD         <entire-module>                        105          0    0.0    0.0     0.0    0.0
+ CAF:$fApplicativeProxy1 Pipes.Internal           <no location info>                      83          0    0.0    0.0     0.0    0.0
+  pure                   Pipes.Internal           src\Pipes\Internal.hs:85:5-20          175          1    0.0    0.0     0.0    0.0
+ CAF:lvl5_r48S           Main                     <no location info>                      75          0    0.0    0.0     0.0    0.0
+  return                 Pipes.Internal           src\Pipes\Internal.hs:95:5-17          174          1    0.0    0.0     0.0    0.0
+ CAF:main1               Main                     <no location info>                      81          0    0.0    0.0     0.0    0.0
+  main                   Main                     app\Main.hs:6:1-58                     134          1    0.0    0.0     0.0    0.0
+ CAF:main2               Main                     <no location info>                      80          0    0.0    0.0     0.0    0.0
+  main                   Main                     app\Main.hs:6:1-58                     136          0    0.0    0.0     0.0    0.0
+   forever'              Main                     app\Main.hs:8:1-28                     151          0    0.0    0.0     0.0    0.0
+    >>=                  Pipes.Internal           src\Pipes\Internal.hs:96:5-18          152          0    0.0    0.0     0.0    0.0
+     _bind               Pipes.Internal           src\Pipes\Internal.hs:(103,1)-(108,29) 153          0    0.0    0.0     0.0    0.0
+      _bind.go           Pipes.Internal           src\Pipes\Internal.hs:(104,5)-(108,29) 154          2    0.0    0.0     0.0    0.0
+       _bind.go.\        Pipes.Internal           src\Pipes\Internal.hs:105:46-56        155          2    0.0    0.0     0.0    0.0
+        printLoop        Main                     app\Main.hs:(9,1)-(11,22)              156          0    0.0    0.0     0.0    0.0
+       printLoop         Main                     app\Main.hs:(9,1)-(11,22)              157          0    0.0    0.0     0.0    0.0
+        lift             Pipes.Internal           src\Pipes\Internal.hs:132:5-44         158          1    0.0    0.0     0.0    0.0
+ CAF:main3               Main                     <no location info>                      77          0    0.0    0.0     5.3    6.4
+  main                   Main                     app\Main.hs:6:1-58                     137          0    0.0    0.0     5.3    6.4
+   forever'              Main                     app\Main.hs:8:1-28                     138     500001    2.3    1.5     5.3    6.4
+    >>=                  Pipes.Internal           src\Pipes\Internal.hs:96:5-18          139     500001    2.3    1.2     3.0    5.0
+     _bind               Pipes.Internal           src\Pipes\Internal.hs:(103,1)-(108,29) 140     500001    0.0    2.0     0.8    3.8
+      _bind.go           Pipes.Internal           src\Pipes\Internal.hs:(104,5)-(108,29) 141     500001    0.8    1.8     0.8    1.8
+ CAF:main5               Main                     <no location info>                      79          0    0.0    0.0     2.3    7.3
+  main                   Main                     app\Main.hs:6:1-58                     146          0    0.8    2.3     2.3    7.3
+   >>=                   Pipes.Internal           src\Pipes\Internal.hs:96:5-18          148     500000    0.8    1.2     1.5    5.0
+    _bind                Pipes.Internal           src\Pipes\Internal.hs:(103,1)-(108,29) 149     500000    0.0    2.0     0.8    3.8
+     _bind.go            Pipes.Internal           src\Pipes\Internal.hs:(104,5)-(108,29) 150     500000    0.8    1.8     0.8    1.8
+ CAF:main6               Main                     <no location info>                      78          0    0.0    0.0     7.5    2.6
+  main                   Main                     app\Main.hs:6:1-58                     147          0    7.5    2.6     7.5    2.6
+ CAF:printLoop           Main                     app\Main.hs:9:1-9                       76          0    0.0    0.0     0.0    0.0
+  printLoop              Main                     app\Main.hs:(9,1)-(11,22)              142          1    0.0    0.0     0.0    0.0
+   >>=                   Pipes.Internal           src\Pipes\Internal.hs:96:5-18          143          1    0.0    0.0     0.0    0.0
+    _bind                Pipes.Internal           src\Pipes\Internal.hs:(103,1)-(108,29) 144          1    0.0    0.0     0.0    0.0
+     _bind.go            Pipes.Internal           src\Pipes\Internal.hs:(104,5)-(108,29) 145          1    0.0    0.0     0.0    0.0
+ main                    Main                     app\Main.hs:6:1-58                     135          0    0.8    2.6    85.0   83.6
+  >>=                    Pipes.Internal           src\Pipes\Internal.hs:96:5-18          168          0    0.0    0.0     0.0    0.6
+   _bind                 Pipes.Internal           src\Pipes\Internal.hs:(103,1)-(108,29) 169          0    0.0    0.0     0.0    0.6
+    _bind.go             Pipes.Internal           src\Pipes\Internal.hs:(104,5)-(108,29) 170     500000    0.0    0.0     0.0    0.6
+     _bind.go.\          Pipes.Internal           src\Pipes\Internal.hs:106:46-56        171     500000    0.0    0.6     0.0    0.6
+  forever'               Main                     app\Main.hs:8:1-28                     159          0    0.0    0.0    84.2   80.4
+   >>=                   Pipes.Internal           src\Pipes\Internal.hs:96:5-18          160          0    0.0    0.0    84.2   80.4
+    _bind                Pipes.Internal           src\Pipes\Internal.hs:(103,1)-(108,29) 161          0    0.0    0.0    84.2   80.4
+     _bind.go            Pipes.Internal           src\Pipes\Internal.hs:(104,5)-(108,29) 162    1499998    7.5    3.5    82.7   78.1
+      _bind.go.\         Pipes.Internal           src\Pipes\Internal.hs:105:46-56        172     999998    0.8    0.6     0.8    0.6
+       printLoop         Main                     app\Main.hs:(9,1)-(11,22)              173          0    0.0    0.0     0.0    0.0
+      printLoop          Main                     app\Main.hs:(9,1)-(11,22)              163          0    2.3    1.2    74.4   74.0
+       lift              Pipes.Internal           src\Pipes\Internal.hs:132:5-44         164     499999   72.2   72.8    72.2   72.8
+        lift.\           Pipes.Internal           src\Pipes\Internal.hs:132:29-43        165     500000    0.0    0.0     0.0    0.0
+     _bind.go.\          Pipes.Internal           src\Pipes\Internal.hs:107:43-56        166     500000    1.5    2.3     1.5    2.3

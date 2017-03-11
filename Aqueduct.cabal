@@ -30,6 +30,7 @@ executable Aqueduct
   main-is:             Main.hs
   build-depends:       base
                      , Aqueduct
+                     , pipes
 
 test-suite spec
   default-language:    Haskell2010

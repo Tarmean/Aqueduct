@@ -1,6 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
 module Aqueduct (Pipe, Producer, Consumer, Effect, runEffect, yield, await, (>->), lift, fold, into, outof, yieldDownstream, yieldUpstream, push, pull, Void) where
-import Control.Monad ((>=>))
 import Data.Void (Void)
 import Control.Monad.Trans
 
@@ -74,17 +73,26 @@ East a' cont `push` f = East a' $ (`push` f) . cont
 instance (Monad m) => Applicative (Pipe b' a a' b m) where
   pure = return
   f <*> a = do { f' <- f; a' <- a; return $ f' a' }
+  f *> a = f >> a
 instance (Monad m) => Functor (Pipe b' a a' b m) where
-  fmap f a = do { a' <- a; return $ f a' }
+  fmap f p0 = go p0 where
+      go (Done r) = Done (f r)
+      go (Context m) = Context (fmap go m)
+      go (East v cont) = East v (go . cont)
+      go (West v cont) = West v (go . cont)
 instance (Monad m) => Monad (Pipe b' a a' b m) where
   return = Done
-  Done r >>= f       = f r
-  Context m >>= f    = Context $ fmap (>>=f) m
-  West b  cont >>= f = West b (cont >=> f)
-  East b' cont >>= f = East b' (cont >=> f)
+  (>>=) = _bind
+_bind :: Functor m => Pipe b' t1 a' b m t -> (t -> Pipe b' t1 a' b m r) -> Pipe b' t1 a' b m r
+_bind p0 f = go p0 where
+  go (Done r)       = f r
+  go (Context m)    = Context $ fmap go m
+  go (West b cont)  = West b (go . cont)
+  go (East b' cont) = East b' (go . cont)
+  
 
 instance (Monad m, Monoid r) => Monoid (Pipe b' a a' b m r) where
   mempty = return mempty
   l `mappend` r = mappend <$> l <*> r
 instance MonadTrans (Pipe b' a a' b) where
-  lift v = Context $ v >>= \r -> return (Done r)
+  lift v = Context $ fmap Done v
